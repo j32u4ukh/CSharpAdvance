@@ -34,6 +34,8 @@ namespace CSharpAdvance
             Solution solution = new Solution();
             Tester tester = new Tester(typeof(Solution), solution);
             tester.Test();
+
+            Console.WriteLine("Press any to end...");
             Console.ReadKey();
         }
     }
