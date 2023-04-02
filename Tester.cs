@@ -35,6 +35,8 @@ namespace CSharpAdvance
     {
         Type type;
         object instance;
+        readonly Type int32_array = typeof(int[]);
+        readonly Type int64_array = typeof(long[]);
 
         public Tester(){}
 
@@ -47,18 +49,19 @@ namespace CSharpAdvance
         public void Test()
         {
             MethodInfo[] methodInfos = type.GetMethods();
+            TestAttribute attr;
+            Type rt;
             object[] attributes;
             object attribute;
             object result;
-            TestAttribute attr;
             int i, len;
             float count, nCorrect;
+            bool isEqual;
 
             foreach (MethodInfo method in methodInfos)
             {
                 attributes = method.GetCustomAttributes(false);
                 len = attributes.Length;
-                //Console.WriteLine($"Start test method: {method.Name}, #attribute: {len}");
                 count = 0;
                 nCorrect = 0;
 
@@ -70,8 +73,23 @@ namespace CSharpAdvance
                     {
                         attr = (TestAttribute)attribute;
                         result = method.Invoke(instance, attr.Args);
+                        isEqual = false;
+                        rt = method.ReturnType;
 
-                        if (result.Equals(attr.Answer))
+                        if (rt == int32_array)
+                        {
+                            isEqual = IsEquals((int[])result, (int[])attr.Answer);
+                        }
+                        else if (rt == int64_array)
+                        {
+                            isEqual = IsEquals((long[])result, (long[])attr.Answer);
+                        }
+                        else
+                        {
+                            isEqual = result.Equals(attr.Answer);
+                        }
+
+                        if (isEqual)
                         {
                             Console.WriteLine($"{method.Name}({count}) Correct");
                             nCorrect++;
@@ -92,55 +110,24 @@ namespace CSharpAdvance
             }
         }
 
-        public void Test<T1, T2, TResult>(Func<T1, T2, TResult> func)
+        public bool IsEquals<T>(T[] a, T[] b)
         {
+            int i, len = a.Length;
 
-        }
-
-        // string Convert(string s, int numRows)
-        public void TestZigzagConversion(Func<string, int, string> func, int q = -1)
-        {
-            (string, int)[] questions = new (string, int)[]
-            { 
-                ("PAYPALISHIRING", 3),
-                ("PAYPALISHIRING", 4),
-                ("A", 1),
-                ("AB", 1),
-                ("ABC", 1),
-                ("ABCDEF", 1),
-                ("ABCD", 2),
-                ("ABCDEF", 2),
-            };
-            string[] answers = new string[] 
+            if(b.Length != len)
             {
-                "PAHNAPLSIIGYIR",
-                "PINALSIGYAHRPI",
-                "A",
-                "AB",
-                "ABC",
-                "ABCDEF",
-                "ACBD",
-                "ACEBDF",
-            };
-            int i, len = answers.Length;
-            string result;
+                return false;
+            }
+
             for(i = 0; i < len; i++)
             {
-                if ((q != -1) && (q != i))
+                if (!a[i].Equals(b[i]))
                 {
-                    continue;
-                }
-                result = func(questions[i].Item1, questions[i].Item2);
-                if(result == answers[i])
-                {
-                    Console.WriteLine($"{i}) Correct");
-                }
-                else
-                {
-                    Console.WriteLine($"{i}) Error | answer: {answers[i]}, result: {result}");
+                    return false;
                 }
             }
-        }
 
+            return true;
+        }
     }
 }
