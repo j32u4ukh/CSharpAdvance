@@ -5,91 +5,70 @@
 
     public class Solution
     {
-
-        public int[] CountProducts(int[] spells, int[] potions, long success)
+        //[Test(new int[] { 1, 2 }, 3, 1)]
+        //[Test(new int[] { 3, 2, 2, 1 }, 3, 3)]
+        //[Test(new int[] { 3, 5, 3, 4 }, 5, 4)]
+        public int NumRescueBoats(int[] people, int limit)
         {
-            int len = spells.Length;
-            int[] results = new int[len];
-            Array.Sort(potions);
-
-            for (int i = 0; i < len; i++)
+            int len = people.Length;
+            //mergeSort(people, 0, len);
+            Array.Sort(people);
+            int i = 0, j = len - 1, count = 0;
+            while(i <= j)
             {
-                if (spells[i] == 0) continue;
+                count++;
 
-                long quotient = success / (long)spells[i];
-                int index = BinarySearch(potions, quotient);
-
-                if (index < 0)
+                if (i == j)
                 {
-                    index = ~index;
+                    break;
                 }
 
-                results[i] = potions.Length - index;
+                if(people[i] + people[j] <= limit)
+                {
+                    i++;
+                    j--;
+                }
+                else
+                {
+                    j--;
+                }
             }
-
-            return results;
+            return count;
         }
 
-
-        [Test(new int[] { 5, 1, 3 }, new int[] { 1, 2, 3, 4, 5 }, 7, new int[] { 4, 0, 3 })]
-        [Test(new int[] { 3, 1, 2 }, new int[] { 8, 5, 8 }, 16, new int[] { 2, 0, 2 })]
-        public int[] SuccessfulPairs(int[] spells, int[] potions, long success)
+        [Test(new int[] { 8, 6, 1, 4, 7 }, new int[] { 1, 4, 6, 7, 8 })]
+        [Test(new int[] { 1, 0 }, new int[] { 0, 1 })]
+        public int[] MergeSort(int[] nums)
         {
-            int i, idx, len = spells.Length, nPosition = potions.Length;
-            long spell, value;
-            int[] results = new int[len];
-            mergeSort(potions, 0, nPosition);
-
-            for (i = 0; i < len; i++)
-            {
-                spell = spells[i];
-                value = success / spell;
-
-                if (success % spell != 0)
-                {
-                    value++;
-                }
-
-                results[i] = CountGreaterThanTarget(potions, value);
-            }
-            return results;
+            mergeSort(nums, 0, nums.Length);
+            return nums;
         }
 
-        private void mergeSort(int[] nums, int start, int end)
+        private void mergeSort(int[] nums, int left, int right)
         {
-            // len = 1
-            if (start == end - 1)
+            if (left < right)
             {
-                return;
-            }
-
-            // len = 2
-            else if (start == end - 2)
-            {
-                end--;
-
-                if (nums[start] > nums[end])
+                // len = 1
+                if (left == right - 1)
                 {
-                    int temp = nums[start];
-                    nums[start] = nums[end];
-                    nums[end] = temp;
+                    return;
                 }
-            }
-            else
-            {
-                int mid = (start + end) / 2;
-                mergeSort(nums, start, mid);
-                mergeSort(nums, mid, end);
-                merge(nums, start, mid, mid, end);
+                else
+                {
+                    int mid = (left + right) / 2;
+                    mergeSort(nums, left, mid);
+                    mergeSort(nums, mid, right);
+                    merge(nums, left, mid, right);
+                }
             }
         }
 
-        public void merge(int[] nums, int s1, int e1, int s2, int e2)
+        public void merge(int[] nums, int s1, int mid, int e2)
         {
-            int i = 0, start = s1, len = e2 - s1;
+            int i = 0, start = s1, s2 = mid, len = e2 - s1;
             int[] temp = new int[len];
 
-            while ((s1 < e1) && (s2 < e2))
+            while ((s1 < mid) && (s2 < e2))
             {
                 if (nums[s1] < nums[s2])
                 {
@@ -105,7 +84,7 @@
                 i++;
             }
 
-            while (s1 < e1)
+            while (s1 < mid)
             {
                 temp[i] = nums[s1];
                 s1++;
@@ -125,66 +104,6 @@
             }
         }
 
-
-        public int CountGreaterThanTarget(int[] arr, long target)
-        {
-            if (arr == null || arr.Length == 0)
-            {
-                return 0;
-            }
-
-            int left = 0;
-            int right = arr.Length - 1;
-            int mid;
-
-            while (left <= right)
-            {
-                mid = left + (right - left) / 2;
-
-                if (arr[mid] < target)
-                {
-                    left = mid + 1;
-                }
-                else
-                {
-                    right = mid - 1;
-                }
-            }
-
-            return arr.Length - left;
-        }
-
-        [Test(new int[] { 1, 2, 3 }, 0, 0)]
-        [Test(new int[] { 1, 2, 3 }, 1, 0)]
-        [Test(new int[] { 1, 2, 3 }, 2, 1)]
-        [Test(new int[] { 1, 2, 3 }, 3, 2)]
-        [Test(new int[] { 1, 2, 3 }, 4, 3)]
-        public int BinarySearch(int[] arr, long target)
-        {
-            int left = 0;
-            int right = arr.Length - 1;
-
-            while (left <= right)
-            {
-                // 為避免 (left + right) 溢位
-                int mid = left + (right - left) / 2;
-
-                if (arr[mid] == target)
-                {
-                    return mid;
-                }
-                else if (arr[mid] < target)
-                {
-                    left = mid + 1;
-                }
-                else
-                {
-                    right = mid - 1;
-                }
-            }
-
-            // 如果目標元素不在數列中，則返回其應該插入的位置
-            return left;
-        }
+        
     }
 }

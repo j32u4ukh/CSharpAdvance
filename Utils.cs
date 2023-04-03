@@ -38,6 +38,40 @@ namespace CSharpAdvance
             return -1;
         }
 
+        [Test(new int[] { 1, 2, 3 }, 0, 0)]
+        [Test(new int[] { 1, 2, 3 }, 1, 0)]
+        [Test(new int[] { 1, 2, 3 }, 2, 1)]
+        [Test(new int[] { 1, 2, 3 }, 3, 2)]
+        [Test(new int[] { 1, 2, 3 }, 4, 3)]
+        // 二元搜尋，若找不到，則返回應插入的索引值
+        public int BinaryInsertSearch(int[] arr, long target)
+        {
+            int left = 0;
+            int right = arr.Length - 1;
+
+            while (left <= right)
+            {
+                // 為避免 (left + right) 溢位
+                int mid = left + (right - left) / 2;
+
+                if (arr[mid] == target)
+                {
+                    return mid;
+                }
+                else if (arr[mid] < target)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+
+            // 如果目標元素不在數列中，則返回其應該插入的位置
+            return left;
+        }
+
         public static void MergeSort(int[] nums, bool reverse = false)
         {
             if (reverse)
