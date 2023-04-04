@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace CSharpAdvance
 {
@@ -33,6 +34,13 @@ namespace CSharpAdvance
 
         static async Task Main(string[] args)
         {
+            int id = 1;
+            await GetAsync($"https://jsonplaceholder.typicode.com/posts/{id}",
+                callback: delegate (HttpStatusCode code, string content)
+                {
+                    Console.WriteLine($"code: {code}\ncontent: {content}");
+                });
+
             //// GET /posts
             //var posts = await GetPosts();
             //Console.WriteLine("All Posts:");
@@ -64,7 +72,7 @@ namespace CSharpAdvance
 
             //await PostAsync();
             //await PutAsync();
-            await PatchAsync();
+            //await PatchAsync();
             //await DeleteAsync();
 
             Console.ReadKey();
@@ -96,6 +104,17 @@ namespace CSharpAdvance
             var responseString = await client.GetStringAsync($"https://jsonplaceholder.typicode.com/comments?postId={postId}");
             var comments = JsonConvert.DeserializeObject<List<Comment>>(responseString);
             return comments;
+        }
+
+        static async Task GetAsync(string uri, Action<HttpStatusCode, string> callback = null)
+        {
+            HttpResponseMessage response = await client.GetAsync(uri);
+
+            if(callback != null)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                callback(response.StatusCode, content);
+            }
         }
 
         static async Task PostAsync()
