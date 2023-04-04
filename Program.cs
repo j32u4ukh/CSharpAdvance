@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
+﻿using MySqlConnector;
+using System;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace CSharpAdvance
 {
@@ -88,12 +85,101 @@ namespace CSharpAdvance
         }
     }
 
+    public class MySql : IDisposable
+    {
+        private MySqlConnection connection;
+
+        public MySql(string server, int port, string user, string password)
+        {
+            string connectionString = "server=localhost;port=3306;database=demo;uid=root;password=Birth=821018;";
+            connection = new MySqlConnection(connectionString);
+            connection.Open();
+        }
+
+        public void Dispose()
+        {
+            if(connection.State == ConnectionState.Open)
+            {
+                connection.Close();
+                Console.WriteLine("Close connection...");
+            }
+        }
+
+        public void Insert(int id, string name)
+        {
+            string sql = $"INSERT INTO person (id, name) VALUES ({id}, '{name}')";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+        }
+
+        public void Select()
+        {
+            string sql = "SELECT * FROM person WHERE id < @id";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", 5);
+
+            //執行SELECT語句，並讀取結果
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int id = reader.GetInt32("id");
+                string name = reader.GetString("name");
+
+                Console.WriteLine("id:{0}, name:{1}", id, name);
+            }
+            reader.Close();
+        }
+
+        public void Update(int id, string name)
+        {
+            string sql = "UPDATE person SET name=@name WHERE id=@id";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            //執行UPDATE語句，並獲取受影響的行數
+            int rowsAffected = cmd.ExecuteNonQuery();
+            Console.WriteLine("受影響的行數：{0}", rowsAffected);
+        }
+
+        public void Delete(int id)
+        {
+            //準備DELETE語句
+            string sql = "DELETE FROM person WHERE id=@id";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            //執行DELETE語句，並獲取受影響的行數
+            int rowsAffected = cmd.ExecuteNonQuery();
+            Console.WriteLine("受影響的行數：{0}", rowsAffected);
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            MsSqlDemo();
+            MySqlDemo();
+            //MsSqlDemo();
             Console.ReadKey();
+        }
+
+        static void MySqlDemo()
+        {
+            using (MySql ms = new MySql(server: "localhost", port: 3306, user: "root", password: "password"))
+            {
+                Console.WriteLine("===== Insert =====");
+                ms.Insert(3, "Kintama");
+                ms.Select();
+
+                Console.WriteLine("===== Update =====");
+                ms.Update(3, "Ginntama");
+                ms.Select();
+
+                Console.WriteLine("===== Delete =====");
+                ms.Delete(3);
+                ms.Select();
+            }
         }
 
         static void MsSqlDemo()
