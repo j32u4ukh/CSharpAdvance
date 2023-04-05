@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace CSharpAdvance
     {
         static void Main(string[] args)
         {
-            PLINQDemo4();
+            ConcurrentDemo3();
 
             Console.WriteLine("Press any to continue...");
             Console.ReadKey();
@@ -127,7 +126,51 @@ namespace CSharpAdvance
                     Console.WriteLine("  " + word);
                 }
             }
+        }
 
+        static void ConcurrentDemo1()
+        {
+            ConcurrentDictionary<string, int> counter = new ConcurrentDictionary<string, int>();
+
+            // 計數器加 1
+            counter.AddOrUpdate("count", 1, (key, oldValue) => oldValue + 1);
+
+            // 輸出計數器的值
+            Console.WriteLine($"Count = {counter["count"]}");
+
+        }
+
+        static void ConcurrentDemo2()
+        {
+            ConcurrentBag<int> numbers = new ConcurrentBag<int>();
+
+            // 添加數字
+            Parallel.For(0, 10, i => {
+                numbers.Add(i);
+            });
+
+            // 輸出數字
+            foreach (int num in numbers)
+            {
+                Console.WriteLine(num);
+            }
+        }
+
+        static void ConcurrentDemo3()
+        {
+            ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
+
+            // 添加字串
+            queue.Enqueue("Hello");
+            queue.Enqueue("World");
+            queue.Enqueue("!");
+
+            // 移除字串
+            string str;
+            while (queue.TryDequeue(out str))
+            {
+                Console.WriteLine(str);
+            }
         }
     }
 }
