@@ -57,6 +57,7 @@ namespace CSharpAdvance
             int i, len;
             float count, nCorrect;
             bool isEqual;
+            DateTime time;
 
             foreach (MethodInfo method in methodInfos)
             {
@@ -64,6 +65,7 @@ namespace CSharpAdvance
                 len = attributes.Length;
                 count = 0;
                 nCorrect = 0;
+                time = DateTime.Now;
 
                 for (i = 0; i < len; i++)
                 {
@@ -105,7 +107,7 @@ namespace CSharpAdvance
 
                 if(count > 0)
                 {
-                    Console.WriteLine($"{method.Name} | Accuracy rate: {nCorrect / count * 100.0f}");
+                    Console.WriteLine($"{method.Name} | Accuracy rate: {nCorrect / count * 100.0f} | Cost time: {DateTime.Now - time}");
                 }
             }
         }
