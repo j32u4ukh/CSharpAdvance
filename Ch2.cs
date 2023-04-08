@@ -31,7 +31,7 @@ namespace CSharpAdvance.Ch2
 
     public class SimpleDelegateUse
     {
-        static void Main()
+        static void main()
         {
             Person jon = new Person("Jon");
             Person tom = new Person("Tom");
@@ -42,6 +42,7 @@ namespace CSharpAdvance.Ch2
             jonsVoice("Hello, son.");
             tomsVoice.Invoke("Hello, Daddy.");
             background("An airplane files past.");
+            jonsVoice -= jon.Say;
         }
     }
 }

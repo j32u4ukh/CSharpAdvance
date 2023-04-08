@@ -8,16 +8,25 @@ namespace CSharpAdvance
 {
     class Program
     {
-        static void print()
+        delegate void Print(string content);
+
+        static void print1(string content)
         {
-            int i = 0;
-            Console.WriteLine(i++);
+            Console.WriteLine($"print1 | content: {content}");
+        }
+
+        static void print2(string content)
+        {
+            Console.WriteLine($"print2 | content: {content}");
         }
 
         static void Main(string[] args)
         {
-            print();
-            print();
+            int? a = 5;
+            int b = a ?? 6;
+            a = null;
+            int c = a ?? 7;
+            Console.WriteLine("b: {0}, c: {1}", b, c);
             Console.ReadKey();
         }
     }
