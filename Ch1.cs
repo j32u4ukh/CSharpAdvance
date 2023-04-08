@@ -38,8 +38,8 @@ namespace CSharpAdvance.Ch1
             get { return name; } 
             private set { name = value; }
         }
-        decimal price;
-        public decimal Price 
+        decimal? price;
+        public decimal? Price 
         { 
             get { return price; } 
             private set { price = value; }
@@ -66,7 +66,7 @@ namespace CSharpAdvance.Ch1
     public class Product3
     {
         public string Name { get; private set; }
-        public decimal Price { get; private set; }
+        public decimal? Price { get; private set; }
         public Product3(){}
         public Product3(string name, decimal price)
         {
@@ -92,9 +92,9 @@ namespace CSharpAdvance.Ch1
     {
         readonly string name;
         public string Name { get { return name; } }
-        readonly decimal price;
-        public decimal Price { get { return price; } }
-        public Product4(string name, decimal price)
+        readonly decimal? price;
+        public decimal? Price { get { return price; } }
+        public Product4(string name, decimal? price = null)
         {
             this.name = name;
             this.price = price;
@@ -180,9 +180,15 @@ namespace CSharpAdvance.Ch1
         public static void QueryDemo2()
         {
             List<Product2> products = Product2.GetSampleProducts();
-            Predicate<Product2> predicate = delegate (Product2 p) { return p.Price > 10m; };
             products.
                 FindAll(delegate (Product2 p) { return p.Price > 10; }).
+                ForEach(Console.WriteLine);
+        }
+        public static void QueryDemo3()
+        {
+            List<Product2> products = Product2.GetSampleProducts();
+            products.
+                FindAll(delegate (Product2 p) { return p.Price == null; }).
                 ForEach(Console.WriteLine);
         }
     }
@@ -205,12 +211,20 @@ namespace CSharpAdvance.Ch1
                 Console.WriteLine(product);
             }
         }
-        public static void QueryDemo()
+        public static void QueryDemo1()
         {
             List<Product3> products = Product3.GetSampleProducts();
             foreach (Product3 product in products.Where(p => p.Price > 10))
             {
                 Console.WriteLine(product);
+            }
+        }
+        public static void QueryDemo2()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            foreach (Product3 product in products.Where(p => p.Price == null))
+            {
+                Console.WriteLine(product.Name);
             }
         }
     }
