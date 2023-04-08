@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpAdvance.Ch1
 {
@@ -114,6 +112,106 @@ namespace CSharpAdvance.Ch1
         public override string ToString()
         {
             return string.Format("{0}: {1}", name, price);
+        }
+    }
+    public class ProductNameComparer1 : IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            Product1 first = (Product1)x;
+            Product1 second = (Product1)y;
+            return first.Name.CompareTo(second.Name);
+        }
+        public static void SortDemo()
+        {
+            ArrayList products = Product1.GetSampleProducts();
+            products.Sort(new ProductNameComparer1());
+            foreach(Product1 product in products)
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void QueryDemo()
+        {
+            ArrayList products = Product1.GetSampleProducts();
+            foreach (Product1 product in products)
+            {
+                if(product.Price > 10m)
+                {
+                    Console.WriteLine(product);
+                }
+            }
+        }
+    }
+    public class ProductNameComparer2 : IComparer<Product2>
+    {
+        public int Compare(Product2 x, Product2 y)
+        {
+            return x.Name.CompareTo(y.Name);
+        }
+        public static void SortDemo1()
+        {
+            List<Product2> products = Product2.GetSampleProducts();
+            products.Sort(new ProductNameComparer2());
+            foreach (Product2 product in products)
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void SortDemo2()
+        {
+            List<Product2> products = Product2.GetSampleProducts();
+            products.Sort(delegate (Product2 x, Product2 y) {
+                return x.Name.CompareTo(y.Name);
+            });
+            foreach (Product2 product in products)
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void QueryDemo1()
+        {
+            List<Product2> products = Product2.GetSampleProducts();
+            Predicate<Product2> predicate = delegate (Product2 p) { return p.Price > 10m; };
+            List<Product2> matches = products.FindAll(predicate);
+            Action<Product2> print = Console.WriteLine;
+            matches.ForEach(print);
+        }
+        public static void QueryDemo2()
+        {
+            List<Product2> products = Product2.GetSampleProducts();
+            Predicate<Product2> predicate = delegate (Product2 p) { return p.Price > 10m; };
+            products.
+                FindAll(delegate (Product2 p) { return p.Price > 10; }).
+                ForEach(Console.WriteLine);
+        }
+    }
+    public class ProductNameComparer3
+    {
+        public static void SortDemo1()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            products.Sort((x, y) => x.Name.CompareTo(y.Name));
+            foreach (Product3 product in products)
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void SortDemo2()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            foreach (Product3 product in products.OrderBy(p => p.Name))
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void QueryDemo()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            foreach (Product3 product in products.Where(p => p.Price > 10))
+            {
+                Console.WriteLine(product);
+            }
         }
     }
 }
