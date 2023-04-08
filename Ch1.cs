@@ -67,6 +67,7 @@ namespace CSharpAdvance.Ch1
     {
         public string Name { get; private set; }
         public decimal? Price { get; private set; }
+        public int SupplierID { get; private set; }
         public Product3(){}
         public Product3(string name, decimal price)
         {
@@ -112,6 +113,21 @@ namespace CSharpAdvance.Ch1
         public override string ToString()
         {
             return string.Format("{0}: {1}", name, price);
+        }
+    }
+    public class Supplier
+    {
+        public string Name { get; private set; }
+        public int SupplierID { get; private set; }
+        public Supplier() { }
+        public static List<Supplier> GetSampleSuppliers()
+        {
+            return new List<Supplier>() 
+            { 
+                new Supplier{SupplierID=1},
+                new Supplier{SupplierID=2},
+                new Supplier{SupplierID=3},
+            };
         }
     }
     public class ProductNameComparer1 : IComparer
@@ -225,6 +241,32 @@ namespace CSharpAdvance.Ch1
             foreach (Product3 product in products.Where(p => p.Price == null))
             {
                 Console.WriteLine(product.Name);
+            }
+        }
+        public static void LINQDemo1()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            var filtered = from Product3 p in products
+                           where p.Price > 10
+                           select p;
+            foreach (Product3 product in filtered)
+            {
+                Console.WriteLine(product);
+            }
+        }
+        public static void LINQDemo2()
+        {
+            List<Product3> products = Product3.GetSampleProducts();
+            List<Supplier> suppliers = Supplier.GetSampleSuppliers();
+            var filtered = from p in products
+                           join s in suppliers
+                           on p.SupplierID equals s.SupplierID
+                           where p.Price > 10
+                           orderby s.Name, p.Name
+                           select new { SupplierName = s.Name, ProductName = p.Name };
+            foreach(var v in filtered)
+            {
+                Console.WriteLine("Supplier: {0}, Product: {1}", v.SupplierName, v.ProductName);
             }
         }
     }
