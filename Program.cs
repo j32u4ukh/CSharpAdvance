@@ -8,8 +8,17 @@ namespace CSharpAdvance
 {
     class Program
     {
+        static void print()
+        {
+            int i = 0;
+            Console.WriteLine(i++);
+        }
+
         static void Main(string[] args)
         {
+            print();
+            print();
+            Console.ReadKey();
         }
     }
 }

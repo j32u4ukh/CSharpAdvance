@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ch1.cs" />
+    <Compile Include="Ch2.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="TreeNode.cs" />
