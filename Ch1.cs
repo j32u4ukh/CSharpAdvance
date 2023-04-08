@@ -10,17 +10,23 @@ namespace CSharpAdvance.Ch1
     public class Product
     {
         string name;
-        public string Name { get { return name; } }
+        public string Name { 
+            get { return name; } 
+            private set { name = value; }
+        }
         decimal price;
-        public decimal Price { get { return price; } }
+        public decimal Price { 
+            get { return price; }
+            private set { price = value; }
+        }
         public Product(string name, decimal price)
         {
-            this.name = name;
-            this.price = price;
+            Name = name;
+            Price = price;
         }
-        public static ArrayList GetSampleProducts()
+        public static List<Product> GetSampleProducts()
         {
-            ArrayList list = new ArrayList();
+            List<Product> list = new List<Product>();
             list.Add(new Product("West Side Story", 9.99m));
             list.Add(new Product("Assassins", 14.99m));
             list.Add(new Product("Frogs", 13.99m));
