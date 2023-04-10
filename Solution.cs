@@ -2,42 +2,93 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class Solution
     {
-        //[Test(new int[] { 1, 2 }, 3, 1)]
-        //[Test(new int[] { 3, 2, 2, 1 }, 3, 3)]
-        //[Test(new int[] { 3, 5, 3, 4 }, 5, 4)]
-        public int NumRescueBoats(int[] people, int limit)
+        //[Test("()", true)]
+        //[Test("()[]{}", true)]
+        //[Test("(]", false)]
+        [Test("([]){}", true)]
+        [Test("(){}", true)]
+        [Test("({})", true)]
+        [Test("(", false)]
+        public bool IsValid(string s)
         {
-            int len = people.Length;
-            //mergeSort(people, 0, len);
-            Array.Sort(people);
-            int i = 0, j = len - 1, count = 0;
-            while(i <= j)
+            int len = s.Length;
+            if(len == 0)
             {
-                count++;
-
-                if (i == j)
-                {
+                return true;
+            }
+            // 若 s 長度為奇數，則返回 false
+            else if ((len & 1) == 1)
+            {
+                return false;
+            }
+            char left = s[0], right;
+            switch(left)
+            {
+                case '(':
+                    right = ')';
                     break;
-                }
-
-                if(people[i] + people[j] <= limit)
+                case '[':
+                    right = ']';
+                    break;
+                case '{':
+                    right = '}';
+                    break;
+                default:
+                    return false;
+            }
+            int i, count = 1;
+            for(i = 1; i < len; i++)
+            {
+                if(s[i] == left)
                 {
-                    i++;
-                    j--;
+                    count++;
+                }
+                else if(s[i] == right)
+                {
+                    count--;
+
+                    if(count == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if(count != 0)
+            {
+                return false;
+            }
+
+            if(i == 1)
+            {
+                if (i + 1 < len)
+                {
+                    return true && IsValid(s.Substring(i + 1, len - 2));
                 }
                 else
                 {
-                    j--;
+                    return true;
                 }
             }
-            return count;
+            else
+            {
+                if (i + 1 < len)
+                {
+                    return true && IsValid(s.Substring(1, i - 1)) && IsValid(s.Substring(i + 1, len - i - 1));
+                }
+                else
+                {
+                    return true && IsValid(s.Substring(1, len - 2));
+                }
+            }
         }
 
-        [Test(new int[] { 8, 6, 1, 4, 7 }, new int[] { 1, 4, 6, 7, 8 })]
-        [Test(new int[] { 1, 0 }, new int[] { 0, 1 })]
+        //[Test(new int[] { 8, 6, 1, 4, 7 }, new int[] { 1, 4, 6, 7, 8 })]
+        //[Test(new int[] { 1, 0 }, new int[] { 0, 1 })]
         public int[] MergeSort(int[] nums)
         {
             mergeSort(nums, 0, nums.Length);
