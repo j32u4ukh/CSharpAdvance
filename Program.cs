@@ -6,27 +6,58 @@ using System.Threading.Tasks;
 
 namespace CSharpAdvance
 {
+    public interface IShape
+    {
+        int Area();
+    }
+
+    public class Circle : IShape
+    {
+        int radius;
+
+        public Circle(int r)
+        {
+            radius = r;
+        }
+
+        public int Area()
+        {
+            return (int)(radius * radius * Math.PI);
+        }
+
+        public override string ToString()
+        {
+            return $"Circle({radius})";
+        }
+    }
+
+    public class AreaComparer<T> : IComparer<T> where T : IShape
+    {
+        public int Compare(IShape x, IShape y)
+        {
+            return x.Area().CompareTo(y.Area());
+        }
+
+        public int Compare(T x, T y)
+        {
+            return x.Area().CompareTo(y.Area());
+        }
+    }
+
+    public class AreaComparer : AreaComparer<IShape> { }
+
     class Program
     {
-        delegate void Print(string content);
-
-        static void print1(string content)
-        {
-            Console.WriteLine($"print1 | content: {content}");
-        }
-
-        static void print2(string content)
-        {
-            Console.WriteLine($"print2 | content: {content}");
-        }
 
         static void Main(string[] args)
         {
-            int? a = 5;
-            int b = a ?? 6;
-            a = null;
-            int c = a ?? 7;
-            Console.WriteLine("b: {0}, c: {1}", b, c);
+            IComparer<IShape> comparer = new AreaComparer();
+            List<Circle> circles = new List<Circle>();
+            circles.Add(new Circle(5));
+            circles.Add(new Circle(3));
+            circles.Add(new Circle(4));
+            circles.Sort(comparer);
+            Console.WriteLine(circles.FormatString());
             Console.ReadKey();
         }
     }
