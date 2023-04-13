@@ -1,78 +1,53 @@
 ﻿namespace CSharpAdvance
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
-    public class Node
-    {
-        public Node root = null;
-        public string Name { get; private set; }
-        public List<Node> nodes;
-
-        public Node(Node root, string name) 
-        {
-            this.root = root;
-            Name = name;
-            nodes = new List<Node>();
-        }
-
-        public void AddNode(string name)
-        {
-            nodes.Add(new Node(this, name));
-        }
-
-        public void AddNode(Node node)
-        {
-            node.root = this;
-            nodes.Add(node);
-        }
-
-        public override string ToString()
-        {
-            List<Node> nodes = new List<Node>() { this };
-            Node node = this.root;
-            while(node != null)
-            {
-                nodes.Insert(0, node);
-                node = node.root;
-            }
-            StringBuilder sb = new StringBuilder();
-            int i, len = nodes.Count;
-            sb.Append("/");
-            if (len > 1)
-            {
-                node = nodes[1];
-                sb.Append($"{node.Name}");
-
-                for (i = 2; i < len; i++)
-                {
-                    node = nodes[i];
-                    sb.Append($"/{node.Name}");
-                }
-            }
-            return sb.ToString();
-        }
-    }
-
     public class Solution
     {
-        [Test("/home/", "/home")]
-        [Test("/../", "/")]
-        [Test("/..", "/")]
-        [Test("/home//foo/", "/home/foo")]
-        [Test("/.../hr", "/.../hr")]
-        [Test("/home/a/../b", "/home/b")]
-        [Test("/a/./b/../../c/", "/c")]
-        [Test("/...", "/...")]
-        [Test("/.", "/")]
-        [Test("/a/../../b/../c//.//", "/c")]
-        [Test("/a//b////c/d//././/..", "/a/b/c")]
-        [Test("/..hidden", "/..hidden")]
-        [Test("/hello../world", "/hello../world")]
-        [Test("/home/../../..", "/")]
-        [Test("/home/of/foo/../../bar/../../is/./here/.", "/is/here")]
+        [Test("[[1, 2], [3, 4]]", "[[1, 1], [2, 2]]", "[[2, 3], [5, 6]]")]
+        public int[][] Add_(string strA, string strB)
+        {
+            int[][] a = JsonConvert.DeserializeObject<int[][]>(strA);
+            int[][] b = JsonConvert.DeserializeObject<int[][]>(strB);
+            return Add(a, b);
+        }
+
+        public int[][] Add(int[][] a, int[][] b)
+        {
+            int row, col, ROW = a.Length, COL;
+            int[][] result = new int[ROW][];
+            for(row = 0; row < ROW; row++)
+            {
+                COL = a[row].Length;
+                result[row] = new int[COL];
+
+                for (col = 0; col < COL; col++)
+                {
+                    result[row][col] = a[row][col] + b[row][col];
+                }
+            }
+            return result;
+        }
+
+        //[Test("/home/", "/home")]
+        //[Test("/../", "/")]
+        //[Test("/..", "/")]
+        //[Test("/home//foo/", "/home/foo")]
+        //[Test("/.../hr", "/.../hr")]
+        //[Test("/home/a/../b", "/home/b")]
+        //[Test("/a/./b/../../c/", "/c")]
+        //[Test("/...", "/...")]
+        //[Test("/.", "/")]
+        //[Test("/a/../../b/../c//.//", "/c")]
+        //[Test("/a//b////c/d//././/..", "/a/b/c")]
+        //[Test("/..hidden", "/..hidden")]
+        //[Test("/hello../world", "/hello../world")]
+        //[Test("/home/../../..", "/")]
+        //[Test("/home/of/foo/../../bar/../../is/./here/.", "/is/here")]
         public string SimplifyPath(string path)
         {
             List<string> nodes = new List<string>();

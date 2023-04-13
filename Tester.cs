@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Reflection;
 
 namespace CSharpAdvance
@@ -36,6 +37,7 @@ namespace CSharpAdvance
         Type type;
         object instance;
         readonly Type int32_array = typeof(int[]);
+        readonly Type int32_array_2d = typeof(int[][]);
         readonly Type int64_array = typeof(long[]);
 
         public Tester(){}
@@ -82,6 +84,10 @@ namespace CSharpAdvance
                         {
                             isEqual = IsEquals((int[])result, (int[])attr.Answer);
                         }
+                        else if (rt == int32_array_2d)
+                        {
+                            isEqual = IsEquals2D((int[][])result, (string)attr.Answer);
+                        }
                         else if (rt == int64_array)
                         {
                             isEqual = IsEquals((long[])result, (long[])attr.Answer);
@@ -126,6 +132,37 @@ namespace CSharpAdvance
                 if (!a[i].Equals(b[i]))
                 {
                     return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsEquals2D<T>(T[][] a, string b)
+        {
+            int row, col, ROW = a.Length, COL;
+            T[][] bArray = JsonConvert.DeserializeObject<T[][]>(b);
+
+            if (bArray.Length != ROW)
+            {
+                return false;
+            }
+
+            for (row = 0; row < ROW; row++)
+            {
+                COL = a[row].Length;
+
+                if (bArray[row].Length != COL)
+                {
+                    return false;
+                }
+
+                for (col = 0; col < COL; col++)
+                {
+                    if(!a[row][col].Equals(bArray[row][col]))
+                    {
+                        return false;
+                    }
                 }
             }
 
