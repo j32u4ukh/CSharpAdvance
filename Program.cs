@@ -6,58 +6,25 @@ using System.Threading.Tasks;
 
 namespace CSharpAdvance
 {
-    public interface IShape
+    public class Person
     {
-        int Area();
-    }
+        public string Name { get; private set; }
+        public int Age { get; private set; }
 
-    public class Circle : IShape
-    {
-        int radius;
-
-        public Circle(int r)
+        public Person(string name, int age)
         {
-            radius = r;
-        }
-
-        public int Area()
-        {
-            return (int)(radius * radius * Math.PI);
-        }
-
-        public override string ToString()
-        {
-            return $"Circle({radius})";
+            Name = name;
+            Age = age;
         }
     }
-
-    public class AreaComparer<T> : IComparer<T> where T : IShape
-    {
-        public int Compare(IShape x, IShape y)
-        {
-            return x.Area().CompareTo(y.Area());
-        }
-
-        public int Compare(T x, T y)
-        {
-            return x.Area().CompareTo(y.Area());
-        }
-    }
-
-    public class AreaComparer : AreaComparer<IShape> { }
 
     class Program
     {
 
         static void Main(string[] args)
         {
-            IComparer<IShape> comparer = new AreaComparer();
-            List<Circle> circles = new List<Circle>();
-            circles.Add(new Circle(5));
-            circles.Add(new Circle(3));
-            circles.Add(new Circle(4));
-            circles.Sort(comparer);
-            Console.WriteLine(circles.FormatString());
+            int[][] arr = new int[][] { new int[]{ 1, 2, 3, 4 }, new int[] { 1, 2, 3, 4 } };
+            Console.WriteLine(arr.SequenceEqual(new int[][] { new int[] { 1, 2, 3, 4 }, new int[] { 1, 2, 3, 4 } }));
             Console.ReadKey();
         }
     }
