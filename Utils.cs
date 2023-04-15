@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpAdvance
 {
@@ -161,6 +158,66 @@ namespace CSharpAdvance
         public static void MergeSort<T>(T[] elements, Func<T, T, bool> sortFunc)
         {
 
+        }
+
+        public static List<List<int>> Combines(List<List<int>> sources)
+        {
+            List<List<int>> results = new List<List<int>>();
+            int i, len = sources[0].Count;
+            for (i = 0; i < len; i++)
+            {
+                results.Add(new List<int>() { sources[0][i] });
+            }
+            len = sources.Count;
+            for (i = 1; i < len; i++)
+            {
+                results = Combine(results, sources[i]);
+            }
+            return results;
+        }
+
+        public static List<List<int>> Combine(List<List<int>> dests, List<int> source)
+        {
+            int d, lenD = dests.Count, s, lenS = source.Count;
+            List<List<int>> results = new List<List<int>>();
+            List<int> result;
+
+            for (d = 0; d < lenD; d++)
+            {
+                for (s = 0; s < lenS; s++)
+                {
+                    result = ListClone(dests[d]);
+                    result.Add(source[s]);
+                    results.Add(result);
+                }
+            }
+
+            return results;
+        }
+
+        public static List<int> ListClone(List<int> list)
+        {
+            List<int> clone = new List<int>();
+            foreach (int i in list)
+            {
+                clone.Add(i);
+            }
+            return clone;
+        }
+
+        public static void FunctionMeasurer(Action func, string title = null)
+        {
+            DateTime time = DateTime.Now;
+            func();
+
+            if (title == null)
+            {
+                Console.WriteLine($"Cost time: {DateTime.Now - time}");
+            }
+            else
+            {
+                Console.WriteLine($"{title} cost time: {DateTime.Now - time}");
+            }
         }
     }
 }

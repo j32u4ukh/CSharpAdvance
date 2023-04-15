@@ -1,14 +1,13 @@
-﻿namespace CSharpAdvance
-{
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace CSharpAdvance
+{
     public class Solution
     {
-        [Test("[[1, 2], [3, 4]]", "[[1, 1], [2, 2]]", "[[2, 3], [5, 6]]")]
+        //[Test("[[1, 2], [3, 4]]", "[[1, 1], [2, 2]]", "[[2, 3], [5, 6]]")]
         public int[][] Add_(string strA, string strB)
         {
             int[][] a = JsonConvert.DeserializeObject<int[][]>(strA);

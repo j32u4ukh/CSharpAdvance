@@ -21,5 +21,16 @@ namespace CSharpAdvance
             sb.Append("]");
             return sb.ToString();
         }
+
+        // TODO: 若 T 為引用，則也需對 T 做深層複製
+        public static List<T> DeepClone<T>(this List<T> list)
+        {
+            List<T> clone = new List<T>();
+            foreach(T t in list)
+            {
+                clone.Add(t);
+            }
+            return clone;
+        }
     }
 }
