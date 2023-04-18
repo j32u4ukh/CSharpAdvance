@@ -36,6 +36,7 @@ namespace CSharpAdvance
     {
         Type type;
         object instance;
+        readonly Type boolean_array = typeof(bool[]);
         readonly Type int32_array = typeof(int[]);
         readonly Type int32_array_2d = typeof(int[][]);
         readonly Type int64_array = typeof(long[]);
@@ -79,6 +80,7 @@ namespace CSharpAdvance
                         result = method.Invoke(instance, attr.Args);
                         isEqual = false;
                         rt = method.ReturnType;
+                        //Console.WriteLine($"ReturnType: {rt.Name}");
 
                         if (rt == int32_array)
                         {
@@ -91,6 +93,10 @@ namespace CSharpAdvance
                         else if (rt == int64_array)
                         {
                             isEqual = IsEquals((long[])result, (long[])attr.Answer);
+                        }
+                        else if (rt == boolean_array)
+                        {
+                            isEqual = IsEquals((bool[])result, (bool[])attr.Answer);
                         }
                         else
                         {
