@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CSharpAdvance
 {
@@ -12,6 +13,36 @@ namespace CSharpAdvance
             this.val = val;
             this.left = left;
             this.right = right;
+        }
+
+        public override string ToString()
+        {
+            List<int?> values = new List<int?>();
+            List<TreeNode> nodes = new List<TreeNode>() { this };
+            TreeNode node;
+            int i = 0;
+            while(i < nodes.Count)
+            {
+                node = nodes[i];
+
+                if(node == null)
+                {
+                    values.Add(null);
+                }
+                else
+                {
+                    values.Add(node.val);
+
+                    if(node.left != null || node.right != null)
+                    {
+                        nodes.Add(node.left);
+                        nodes.Add(node.right);
+                    }
+                }
+
+                i++;
+            }
+            return JsonConvert.SerializeObject(values);
         }
 
         public static TreeNode NewTreeNodes(int?[] numbers)
