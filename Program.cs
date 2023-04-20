@@ -23,8 +23,7 @@ namespace CSharpAdvance
 
         static void Main(string[] args)
         {
-            int[][] arr = new int[][] { new int[]{ 1, 2, 3, 4 }, new int[] { 1, 2, 3, 4 } };
-            Console.WriteLine(arr.SequenceEqual(new int[][] { new int[] { 1, 2, 3, 4 }, new int[] { 1, 2, 3, 4 } }));
+            AdapterPattern.TaiwanMan.Demo();
             Console.ReadKey();
         }
     }
