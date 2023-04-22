@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Demo1\Demo1.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="ListNode.cs" />

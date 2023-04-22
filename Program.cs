@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,11 @@ namespace CSharpAdvance
     {
         static void Main(string[] args)
         {
+            Demo1.Demo demo = new Demo1.Demo(program: Demo1.Demo.program);
+            demo.Excute();
+
+            Console.WriteLine("Press any to end...");
+            Console.ReadKey();
         }
     }
 }
