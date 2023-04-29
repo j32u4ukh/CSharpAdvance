@@ -55,8 +55,8 @@ namespace CSharpAdvance
             TestAttribute attr;
             Type rt;
             object[] attributes;
-            object attribute;
-            object result;
+            object attribute, result;
+            string answerString, resultString;
             int i, len;
             float count, nCorrect;
             bool isEqual;
@@ -85,22 +85,32 @@ namespace CSharpAdvance
                         if (rt == int32_array)
                         {
                             isEqual = IsEquals((int[])result, (int[])attr.Answer);
+                            answerString = $"{((int[])attr.Answer).FormatString()}";
+                            resultString = $"{((int[])result).FormatString()}";
                         }
                         else if (rt == int32_array_2d)
                         {
                             isEqual = IsEquals2D((int[][])result, (string)attr.Answer);
+                            answerString = $"{((int[][])attr.Answer).FormatString()}";
+                            resultString = $"{((int[][])result).FormatString()}";
                         }
                         else if (rt == int64_array)
                         {
                             isEqual = IsEquals((long[])result, (long[])attr.Answer);
+                            answerString = $"{((long[])attr.Answer).FormatString()}";
+                            resultString = $"{((long[])result).FormatString()}";
                         }
                         else if (rt == boolean_array)
                         {
                             isEqual = IsEquals((bool[])result, (bool[])attr.Answer);
+                            answerString = $"{((bool[])attr.Answer).FormatString()}";
+                            resultString = $"{((bool[])result).FormatString()}";
                         }
                         else
                         {
                             isEqual = result.Equals(attr.Answer);
+                            answerString = attr.Answer.ToString();
+                            resultString = result.ToString();
                         }
 
                         if (isEqual)
@@ -110,7 +120,7 @@ namespace CSharpAdvance
                         }
                         else
                         {
-                            Console.WriteLine($"{method.Name}({count}) Failed | answer: {attr.Answer}, result: {result}");
+                            Console.WriteLine($"{method.Name}({count}) Failed | answer: {answerString}, result: {resultString}");
                         }
 
                         count++;
