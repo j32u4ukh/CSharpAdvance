@@ -4,6 +4,60 @@ using System.Collections.Generic;
 
 namespace CSharpAdvance
 {
+    public class DSU
+    {
+        private int[] parents;
+        private int[] ranks;
+
+        public DSU(int n)
+        {
+            parents = new int[n];
+            ranks = new int[n];
+
+            for(int i = 0; i < n; i++)
+            {
+                parents[i] = i;
+            }
+        }
+
+        public int Find(int i)
+        {
+            if(parents[i] == i)
+            {
+                return i;
+            }
+
+            parents[i] = Find(parents[i]);
+            return parents[i];
+        }
+
+        public bool Union(int i, int j)
+        {
+            int pi = Find(i), pj = Find(j);
+
+            if(pi == pj)
+            {
+                return false;
+            }
+
+            if(ranks[pi] < ranks[pj])
+            {
+                parents[pi] = pj;
+            }
+            else
+            {
+                parents[pj] = pi;
+
+                if(ranks[pi] == ranks[pj])
+                {
+                    ranks[pi]++;
+                }
+            }
+
+            return true;
+        }
+    }
+
     public class Solution
     {
         //[Test("[[1, 2], [3, 4]]", "[[1, 1], [2, 2]]", "[[2, 3], [5, 6]]")]
