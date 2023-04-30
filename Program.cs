@@ -1,20 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace CSharpAdvance
 {
-    public class Person
+    public class Demo
     {
-        public string Name { get; private set; }
-        public int Age { get; private set; }
-
-        public Person(string name, int age)
+        public static void GuessANumber()
         {
-            Name = name;
-            Age = age;
+            Random random = new Random();
+            int min = 1, max = 100;
+            int guess = 0 , target = random.Next(min, max + 1);
+
+            while (guess != target)
+            {
+                Console.Write($"Guess a number({min}-{max}):");
+
+                if(int.TryParse(Console.ReadLine().Trim(), out guess))
+                {
+                    if(guess < target)
+                    {
+                        Console.WriteLine("Too low...");
+                        min = Math.Max(min, guess);
+                    }
+                    else if(guess > target)
+                    {
+                        Console.WriteLine("Too high...");
+                        max = Math.Min(max, guess);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Correct!!");
+                    }
+                }
+            }
+
+            Console.Write("Press any key to exit...");
         }
     }
 
@@ -23,7 +41,7 @@ namespace CSharpAdvance
 
         static void Main(string[] args)
         {
-            AdapterPattern.TaiwanMan.Demo();
+            Demo.GuessANumber();
             Console.ReadKey();
         }
     }
